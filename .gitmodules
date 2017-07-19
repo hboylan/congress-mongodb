@@ -1,0 +1,7 @@
+[submodule "congress"]
+	path = congress
+	url = https://github.com/unitedstates/congress
+[submodule "congress-legislators"]
+	path = congress-legislators
+	url = https://github.com/unitedstates/congress-legislators
+	branch = gh-pages

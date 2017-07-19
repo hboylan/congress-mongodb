@@ -1,0 +1,35 @@
+{
+  "name": "congress-mongodb",
+  "version": "1.0.0",
+  "description": "Import congress data to MongoDB",
+  "main": "index.js",
+  "scripts": {
+    "init": "cd congress-legislators && git submodule init && git submodule update && git checkout origin/gh-pages && cd .. && yarn"
+  },
+  "bin": {
+    "congress": "./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hboylan/congress-mongodb.git"
+  },
+  "keywords": [
+    "cli",
+    "congress",
+    "import",
+    "mongodb",
+    "unitedstates"
+  ],
+  "author": "Hugh Boylan <bluehugh2@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hboylan/congress-mongodb/issues"
+  },
+  "homepage": "https://github.com/hboylan/congress-mongodb#readme",
+  "dependencies": {
+    "commander": "^2.11.0",
+    "jsonfile": "^3.0.1",
+    "mongodb": "^2.2.30",
+    "mongoose": "^4.11.3"
+  }
+}
