@@ -27,7 +27,7 @@ module.exports = (data, u) => {
 
         // sync congress
         congress(data, db)
-          .then(resolve, reject); // comment this to output error stack
+          // .then(resolve, reject); // comment this to output error stack
       })
     });
   });

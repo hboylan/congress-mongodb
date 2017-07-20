@@ -1,3 +1,4 @@
+const Promise = require('bluebird');
 const util = require('../util');
 const titleMap = {
   'Chair': 'chair',
