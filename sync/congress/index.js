@@ -98,10 +98,10 @@ module.exports = (data, db) => {
   // sync
   return promise
     .then(() => {
-      console.log(`Finished syncing...\n${JSON.stringify(res, null, 2)}\n`);
+      util.info(`Finished syncing...\n${JSON.stringify(res, null, 2)}\n`);
       process.exit(0);
     }, err => {
-      console.error(`Failed to sync...\n${err}\n`);
+      util.error(`Failed to sync...\n${err}\n`);
       process.exit(1);
     });
 

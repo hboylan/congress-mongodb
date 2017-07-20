@@ -1,19 +1,18 @@
-var Promise = require('bluebird')
-
+const util = require('../util');
 const chambers = {
   sen: 'senate',
   rep: 'house'
-}
+};
 
 module.exports = sync => {
-  console.log('Starting members...');
+  util.info('Starting members...');
 
   return sync.json.readFileAsync(sync.paths.members)
     .then(list => {
       let bulk = sync.db.Member.initializeUnorderedBulkOp()
 
       list.forEach(json => {
-        console.log(`Found member: ${json.name.official_full}`)
+        util.log(`Found member: ${json.name.official_full}`);
 
         let term = json.terms[json.terms.length - 1]
         json.current = true
@@ -28,7 +27,7 @@ module.exports = sync => {
       return bulk.execute()
     })
     .then(res => {
-      console.log('Finished members...');
+      util.info('Finished members...');
       return sync.response(res);
     });
-}
+};

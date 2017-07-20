@@ -1,13 +1,14 @@
 const fs = require('fs');
 const path = require('path');
 const Promise = require('bluebird');
+const util = require('../util');
 
 module.exports = sync => {
-  console.log('Starting bills...');
+  util.info('Starting bills...');
 
   // bill_subjects
   function _getBillSubjects(bills) {
-    console.log('Starting bill subjects...');
+    util.info('Starting bill subjects...');
 
     // bulk op
     let bulk = sync.db.BillSubject.initializeUnorderedBulkOp()
@@ -17,7 +18,7 @@ module.exports = sync => {
         // count num_bills
         return Promise
           .map(subjects, value => {
-            console.log(`Found bill subject: ${value}`)
+            util.log(`Found bill subject: ${value}`)
             return sync.db.Bill.count({subjects: value})
               .then(num_bills => {
 
@@ -31,7 +32,7 @@ module.exports = sync => {
       .then(() => bulk.execute())
       .then(res => {
         bills.subjects = sync.response(res)
-        console.log('Finished bill subjects...');
+        util.info('Finished bill subjects...');
         return bills
       }, err => {
         return new Error('No bills')
@@ -99,7 +100,7 @@ module.exports = sync => {
 
         let bulk = sync.db.Bill.initializeUnorderedBulkOp()
         bills.forEach(bill => {
-          console.log(`Found bill: ${bill.official_title}`)
+          util.log(`Found bill: ${bill.official_title}`)
           bulk.find({'bill_id': bill.bill_id})
             .upsert()
             .update({$set: bill})
@@ -117,7 +118,7 @@ module.exports = sync => {
 
   return sync.session('bills', _getBillTypes)
     .then(bills => {
-      console.log('Finished bills...');
+      util.info('Finished bills...');
       return bills;
     })
     .then(_getBillSubjects);

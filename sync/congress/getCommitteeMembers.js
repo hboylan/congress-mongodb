@@ -1,5 +1,4 @@
-const Promise = require('bluebird')
-
+const util = require('../util');
 const titleMap = {
   'Chair': 'chair',
   'Chairman': 'chairman',
@@ -12,7 +11,7 @@ const titleMap = {
 }
 
 module.exports = sync => {
-  console.log('Starting committee-members...');
+  util.info('Starting committee-members...');
 
   /**
    * Sync committee members
@@ -85,7 +84,7 @@ module.exports = sync => {
         .then(() => bulkCommittee.execute())
         .then(() => bulkCommitteeMember.execute())
         .then(res => {
-          console.log('Finished committee-members...');
+          util.info('Finished committee-members...');
           return sync.response(res);
         });
   })

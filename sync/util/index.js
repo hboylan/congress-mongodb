@@ -29,6 +29,8 @@ util.error = err => {
   console.log(chalk.red(err));
 };
 
+util.log = console.log;
+
 util.isDir = str => {
   try {
     if (!fs.statSync(str).isDirectory()) throw new Error();

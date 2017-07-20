@@ -1,9 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 const Promise = require('bluebird');
+const util = require('../util');
 
 module.exports = sync => {
-  console.log('Starting votes...');
+  util.info('Starting votes...');
 
   const _getMember = json => {
     const error = () => {
@@ -80,7 +81,7 @@ module.exports = sync => {
 
   return sync.session('votes', _getVotes)
     .then(res => {
-      console.log('Finished votes...');
+      util.info('Finished votes...');
       return res;
     });
 }

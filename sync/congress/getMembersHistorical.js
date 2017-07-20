@@ -1,21 +1,22 @@
-const Promise = require('bluebird')
+const util = require('../util');
 
 module.exports = sync => {
-  console.log('Starting members-historical...');
+  util.info('Starting members-historical...');
 
   // get JSON
-  return sync.json.readFileAsync(sync.paths.membersHistorical).then(list => {
+  return sync.json.readFileAsync(sync.paths.membersHistorical)
+    .then(list => {
 
-    // upsert Mongo
-    var bulk = sync.db.Member.initializeUnorderedBulkOp()
-    for (var i in list) {
-      let json = list[i]
-      bulk.find({ 'id.thomas': json.id.thomas }).upsert().update({ $set: json })
-    }
-    return bulk.execute()
-  })
-  .then(res => {
-    console.log('Finished members-historical...');
-    return sync.response(res);
-  });
-}
+      // upsert Mongo
+      var bulk = sync.db.Member.initializeUnorderedBulkOp()
+      for (var i in list) {
+        let json = list[i]
+        bulk.find({ 'id.thomas': json.id.thomas }).upsert().update({ $set: json })
+      }
+      return bulk.execute()
+    })
+    .then(res => {
+      util.info('Finished members-historical...');
+      return sync.response(res);
+    });
+};
