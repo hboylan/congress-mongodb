@@ -1,7 +1,7 @@
 {
   "name": "congress-mongodb",
   "description": "Integrate congress data using MongoDB",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Hugh Boylan <bluehugh2@gmail.com>",
   "bin": {
     "congress": "./sync/commands/index.js",
@@ -38,7 +38,7 @@
     "url": "git+https://github.com/hboylan/congress-mongodb.git"
   },
   "scripts": {
-    "init": "cd congress-legislators && git submodule init && git submodule update && mkdir -p congress/data && cd ../congress && git submodule init && git submodule update && cd ..",
+    "init": "cd congress-legislators && git submodule init && git submodule update && mkdir -p congress/data && cd ..",
     "preinstall": "npm run init"
   }
 }
