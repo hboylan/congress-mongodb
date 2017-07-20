@@ -1,6 +1,7 @@
 const Promise = require('bluebird');
 const mongodb = require('mongodb');
 const congress = require('./congress');
+const util = require('./util');
 let uri = process.env.MONGODB_URI;
 
 module.exports = (data, u) => {
@@ -13,7 +14,8 @@ module.exports = (data, u) => {
     mongodb.MongoClient.connect(uri, (err, db) => {
 
       db.collections((err, collections) => {
-        console.log(`Syncing to ${uri}:\n${collections.map(c => c.s.name).join('\n')}\n`);
+        util.info(`Syncing to ${uri}:`);
+        util.blue(`${collections.map(c => c.s.name).join('\n')}\n`);
 
         // MongoDB Driver collections
         db.Bill = db.collection('bills');

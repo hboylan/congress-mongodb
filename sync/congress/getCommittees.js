@@ -50,7 +50,7 @@ module.exports = sync => {
         })
         .then(() => bulk.execute())
         .then(res => {
-          util.info('Finished committees...');
+          util.info('Finished committees...\n');
           return sync.response(res);
         });
     })

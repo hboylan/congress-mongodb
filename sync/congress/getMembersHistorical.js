@@ -16,7 +16,7 @@ module.exports = sync => {
       return bulk.execute()
     })
     .then(res => {
-      util.info('Finished members-historical...');
+      util.info('Finished members-historical...\n');
       return sync.response(res);
     });
 };

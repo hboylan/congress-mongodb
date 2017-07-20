@@ -84,7 +84,7 @@ module.exports = sync => {
         .then(() => bulkCommittee.execute())
         .then(() => bulkCommitteeMember.execute())
         .then(res => {
-          util.info('Finished committee-members...');
+          util.info('Finished committee-members...\n');
           return sync.response(res);
         });
   })

@@ -81,7 +81,7 @@ module.exports = sync => {
 
   return sync.session('votes', _getVotes)
     .then(res => {
-      util.info('Finished votes...');
+      util.info('Finished votes...\n');
       return res;
     });
 }

@@ -32,7 +32,7 @@ module.exports = sync => {
       .then(() => bulk.execute())
       .then(res => {
         bills.subjects = sync.response(res)
-        util.info('Finished bill subjects...');
+        util.info('Finished bill subjects...\n');
         return bills
       }, err => {
         return new Error('No bills')
@@ -118,7 +118,7 @@ module.exports = sync => {
 
   return sync.session('bills', _getBillTypes)
     .then(bills => {
-      util.info('Finished bills...');
+      util.info('Finished bills...\n');
       return bills;
     })
     .then(_getBillSubjects);

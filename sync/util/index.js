@@ -29,6 +29,10 @@ util.error = err => {
   console.log(chalk.red(err));
 };
 
+util.blue = str => {
+  console.log(chalk.blue(str));
+};
+
 util.log = console.log;
 
 util.isDir = str => {
