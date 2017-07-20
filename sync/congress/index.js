@@ -33,11 +33,13 @@ function _flatten(res) {
 module.exports = (data, db) => {
   let congress = {
     db: db,
-    paths: util.paths(data),
     dirs: _dirs,
     isDir: _isDir,
     flatten: _flatten,
     json: json,
+    paths: util.paths(data),
+
+    // order matters
     modules: {
       members: require('./getMembers'),
       membersHistorical: require('./getMembersHistorical'),
@@ -48,10 +50,11 @@ module.exports = (data, db) => {
     }
   }
 
+  // iterate session directories
   congress.session = (target, mapFn) => {
 
     // /data/congress/
-    var sessionDirs = _dirs(congress.paths.session)
+    var sessionDirs = _dirs(congress.paths.congress)
     return Promise.map(sessionDirs, session => {
       var dirs = _dirs(path.join(session, target))
 
@@ -65,12 +68,14 @@ module.exports = (data, db) => {
     }).then(_flatten)
   }
 
+  // parse bulk response
   congress.response = res => {
     res = res.toJSON()
     delete res.upserted
     return res
   }
 
+  // link promises below
   let res = {};
   congress.res = field => {
     return data => {
@@ -79,6 +84,7 @@ module.exports = (data, db) => {
     };
   };
 
+  // iterate modules
   let promise;
   for (let field in congress.modules) {
     promise = promise
@@ -89,9 +95,18 @@ module.exports = (data, db) => {
         .then(congress.res(field));
   }
 
+  // sync
   return promise
-    .then(() => res);
+    .then(() => {
+      console.log(`Finished syncing...\n${JSON.stringify(res, null, 2)}\n`);
+      process.exit(0);
+    }, err => {
+      console.error(`Failed to sync...\n${err}\n`);
+      process.exit(1);
+    });
 
+  // ...reference for compact version...
+  //
   // return congress.modules.bills(congress)
   //   .then(congress.res('bills'))
   //   .then(congress.modules.committees)

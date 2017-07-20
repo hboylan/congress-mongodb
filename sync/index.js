@@ -14,18 +14,19 @@ module.exports = (data, u) => {
 
       db.collections((err, collections) => {
         console.log(`Syncing to ${uri}:\n${collections.map(c => c.s.name).join('\n')}\n`);
+
+        // MongoDB Driver collections
+        db.Bill = db.collection('bills');
+        db.BillSubject = db.collection('bill_subjects');
+        db.Committee = db.collection('committees');
+        db.CommitteeMember = db.collection('committee_members');
+        db.Member = db.collection('members');
+        db.Vote = db.collection('votes');
+
+        // sync congress
+        congress(data, db)
+          .then(resolve, reject); // comment this to output error stack
       })
-
-      // MongoDB Driver collections
-      db.Bill = db.collection('bills');
-      db.BillSubject = db.collection('bill_subjects');
-      db.Committee = db.collection('committees');
-      db.CommitteeMember = db.collection('committee_members');
-      db.Member = db.collection('members');
-
-      // sync congress
-      return congress(data, db)
-        .then(resolve, reject); // comment this to output error stack
     });
   });
 };

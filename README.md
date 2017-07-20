@@ -37,10 +37,14 @@
 # CLI
 yarn global add congress-mongodb
 congress -h
+congress fetch -h
+congress sync -h
 
 # Integration
 yarn add congress-mongodb
 ./node_modules/.bin/congress -h
+./node_modules/.bin/congress-fetch -h
+./node_modules/.bin/congress-sync -h
 ```
 
 
@@ -49,7 +53,6 @@ yarn add congress-mongodb
 #### Command - fetch
 Download sitemaps, json, etc.
 ```sh
-congress fetch -h
 congress fetch
 congress fetch -d tmp
 ```
@@ -57,7 +60,6 @@ congress fetch -d tmp
 #### Command - sync
 Import data from files to mongodb in structured format
 ```sh
-congress sync -h
 congress sync
 congress sync -d tmp
 congress sync -d tmp -u mongodb://localhost:27017/my-db # or $MONGODB_URI

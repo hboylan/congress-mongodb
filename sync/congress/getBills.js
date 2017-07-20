@@ -7,6 +7,7 @@ module.exports = sync => {
 
   // bill_subjects
   function _getBillSubjects(bills) {
+    console.log('Starting bill subjects...');
 
     // bulk op
     let bulk = sync.db.BillSubject.initializeUnorderedBulkOp()
@@ -30,6 +31,7 @@ module.exports = sync => {
       .then(() => bulk.execute())
       .then(res => {
         bills.subjects = sync.response(res)
+        console.log('Finished bill subjects...');
         return bills
       }, err => {
         return new Error('No bills')
@@ -109,11 +111,14 @@ module.exports = sync => {
       .then(res => {
         let json = {}
         json[path.parse(type).base] = sync.response(res)
-        console.log('Finished bills...');
         return json
       })
   }
 
   return sync.session('bills', _getBillTypes)
-    .then(_getBillSubjects)
+    .then(bills => {
+      console.log('Finished bills...');
+      return bills;
+    })
+    .then(_getBillSubjects);
 }

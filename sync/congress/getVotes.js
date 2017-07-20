@@ -13,7 +13,7 @@ module.exports = sync => {
       .then(member => !member ? error() : member._id, error);
   }
 
-  // /data/congress/{congress}/{year}/{votes}/
+  // /data/congress/{congress}/votes/{year}/{vote}
   const _getVote = votePath => {
     var file = path.join(votePath, 'data.json')
     var json = JSON.parse(fs.readFileSync(file, 'utf8'))
@@ -45,37 +45,42 @@ module.exports = sync => {
     })
   }
 
-  // /data/congress/{congress}/{year}/
-  let _getVotes = year => {
-    var dirs = sync.dirs(year), chunked = [], chunk = 100;
-    for (var i = 0; i < dirs.length; i += chunk) {
+  // /data/congress/{congress}/votes/{year}
+  const _getVotes = year => {
+    const yr = path.parse(year).base;
+    const dirs = sync.dirs(year), chunked = [], chunk = 100;
+    for (let i = 0; i < dirs.length; i += chunk) {
       chunked.push(dirs.slice(i, i + chunk))
     }
 
     // parse votes
     return Promise
-      .map(chunked, dirs => Promise.map(dirs, _getVote, {concurrency: 4}))
+      .map(chunked, dirs => Promise.map(dirs, _getVote, {concurrency: 2}))
       .then(chunkedVotes => {
 
         // chunked bulk save
-        return Promise.map(chunkedVotes, votes => {
-          var bulk = sync.db.Vote.initializeUnorderedBulkOp()
-          votes.forEach(vote => {
-            bulk.find({vote_id: vote.vote_id}).upsert().update({$set: vote})
-          })
-
-          return bulk.execute(res => {
-            var json = {}
-            json[path.parse(year).base] = res
-            return json
-          })
-        })
-      }, {concurrency: 1})
+        return Promise
+          .map(chunkedVotes, votes => {
+            let bulk = sync.db.Vote.initializeUnorderedBulkOp()
+            votes.forEach(vote => {
+              bulk.find({vote_id: vote.vote_id}).upsert().update({$set: vote})
+            })
+            return bulk.execute()
+              .then(sync.response);
+          });
+      }, {
+        concurrency: 1
+      })
       .then(res => {
-        console.log('Finished votes...');
-        return res;
+        const json = {};
+        json[yr] = res;
+        return json;
       });
   }
 
   return sync.session('votes', _getVotes)
+    .then(res => {
+      console.log('Finished votes...');
+      return res;
+    });
 }

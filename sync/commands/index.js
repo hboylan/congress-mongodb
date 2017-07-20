@@ -8,7 +8,7 @@ congress
 
 congress.command('fetch', 'Fetch congress data to directory');
 
-congress.command('remove', `Remove congress 'cache' or 'data'`).alias('rm');
+// congress.command('remove', `Remove congress 'cache' or 'data'`).alias('rm');
 
 congress.command('sync', 'Import data to $MONGODB_URI');
 
