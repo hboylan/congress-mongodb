@@ -24,11 +24,11 @@
 #### CLI
 - [congress](https://github.com/unitedstates/congress)
 - [congress-legislators](https://github.com/unitedstates/congress)
-- [MongoDB](https://www.mongodb.com/download-center#community)
+- [MongoDB](https://www.mongodb.com/download-center#community)^3.2.0
 - 4GB RAM+ to sync
 
 #### Integration
-- [mongoose](https://npmjs.org/packages/mongoose)
+- [mongoose](https://npmjs.org/packages/mongoose)^4.0.0
 
 
 ## Install

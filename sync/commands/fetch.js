@@ -12,7 +12,6 @@ congress
 // validate
 const root = congress.rawArgs.indexOf('-d') === -1 ? util.root : process.cwd();
 congress.data = path.join(root, congress.data);
-console.log(congress.data);
 util.isDir(congress.data);
 util.info(`fetching...\n${congress.data}\n`);
 

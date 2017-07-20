@@ -1,7 +1,7 @@
 {
   "name": "congress-mongodb",
   "description": "Integrate congress data using MongoDB",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "Hugh Boylan <bluehugh2@gmail.com>",
   "bin": {
     "congress": "./sync/commands/index.js",
