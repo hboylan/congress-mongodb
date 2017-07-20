@@ -43,10 +43,11 @@ yarn add congress-mongodb
 ./node_modules/.bin/congress -h
 ```
 
+
 ## Integrate
 
 #### Command - fetch
-Downloads sitemaps, json, etc.
+Download sitemaps, json, etc.
 ```sh
 congress fetch -h
 congress fetch
@@ -54,7 +55,7 @@ congress fetch -d tmp
 ```
 
 #### Command - sync
-Imports data from files to mongodb in structured format
+Import data from files to mongodb in structured format
 ```sh
 congress sync -h
 congress sync
