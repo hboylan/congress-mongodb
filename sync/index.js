@@ -14,10 +14,10 @@ module.exports = (data, u) => {
     mongodb.MongoClient.connect(uri, (err, db) => {
 
       db.collections((err, collections) => {
-        util.info(`Syncing to ${uri}:`);
-        util.blue(`${collections.map(c => c.s.name).join('\n')}\n`);
+        util.info(`Database:\n${uri}\n`);
+        util.info(`Collections:\n${collections.map(c => c.s.name).join('\n')}\n`);
 
-        // MongoDB Driver collections
+        // MongoDB driver collections
         db.Bill = db.collection('bills');
         db.BillSubject = db.collection('bill_subjects');
         db.Committee = db.collection('committees');

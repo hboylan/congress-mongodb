@@ -14,7 +14,7 @@ congress
 const root = congress.rawArgs.indexOf('-d') === -1 ? util.root : process.cwd();
 congress.data = path.join(root, congress.data);
 util.isDir(congress.data);
-util.info(`syncing...\n${congress.data}\n`);
+util.info(`syncing...\n\nData:\n${congress.data}\n`);
 
 // sync
 require(path.join(util.root, 'sync'))(congress.data, congress.uri);
