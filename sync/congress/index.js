@@ -1,24 +1,8 @@
 var path = require('path'),
   fs = require('fs'),
   Promise = require('bluebird'),
-  json = Promise.promisifyAll(require('jsonfile')),
-  exec = require('child_process').exec,
-  paths = {
-    congress: 'congress/data',
-    committeeMembers: 'congress-legislators/committee-membership-current.json',
-    committees: 'congress-legislators/committees-current.json',
-    committeesHistorical: 'congress-legislators/committees-historical.json',
-    members: 'congress-legislators/legislators-current.json',
-    membersHistorical: 'congress-legislators/legislators-historical.json'
-  }
-
-function _path (p) {
-  return path.join(__dirname, '../../', p || '')
-}
-
-for (var p in paths) {
-  paths[p] = _path(paths[p])
-}
+  util = require('../util'),
+  json = Promise.promisifyAll(require('jsonfile'));
 
 function _isDir(path) {
   try {
@@ -46,29 +30,28 @@ function _flatten(res) {
   return dict
 }
 
-module.exports = db => {
+module.exports = (data, db) => {
   let congress = {
     db: db,
-    path: _path,
+    paths: util.paths(data),
     dirs: _dirs,
     isDir: _isDir,
     flatten: _flatten,
-    paths: paths,
     json: json,
     modules: {
-      votes: require('./getVotes'),
-      bills: require('./getBills'),
       members: require('./getMembers'),
       membersHistorical: require('./getMembersHistorical'),
       committees: require('./getCommittees'),
       committeeMembers: require('./getCommitteeMembers'),
+      bills: require('./getBills'),
+      votes: require('./getVotes'),
     }
   }
 
   congress.session = (target, mapFn) => {
 
     // /data/congress/
-    var sessionDirs = _dirs(paths.session)
+    var sessionDirs = _dirs(congress.paths.session)
     return Promise.map(sessionDirs, session => {
       var dirs = _dirs(path.join(session, target))
 
@@ -97,29 +80,22 @@ module.exports = db => {
   };
 
   let promise;
-  // for (let field in congress.modules) {
-  //   promise = promise
-  //     ? promise
-  //       .then(congress.modules[field])
-  //       .then(congress.res(field))
-  //     : promise = congress.modules[field](congress)
-  //       .then(congress.res(field));
-  // }
-  //
-  // return promise
-  //   .then(() => res);
+  for (let field in congress.modules) {
+    promise = promise
+      ? promise
+        .then(congress.modules[field])
+        .then(congress.res(field))
+      : promise = congress.modules[field](congress)
+        .then(congress.res(field));
+  }
 
-  return congress.modules.membersHistorical(congress)
-    .then(congress.res('membersHistorical'))
-    .then(congress.modules.members)
-    .then(congress.res('members'))
-    .then(congress.modules.committees)
-    .then(congress.res('committees'))
-    .then(congress.modules.committeeMembers)
-    .then(congress.res('committeeMembers'))
-    .then(congress.modules.bills)
-    .then(congress.res('bills'))
-    .then(congress.modules.votes)
-    .then(congress.res('votes'))
+  return promise
     .then(() => res);
+
+  // return congress.modules.bills(congress)
+  //   .then(congress.res('bills'))
+  //   .then(congress.modules.committees)
+  //   .then(congress.res('committees'))
+  //   ...
+  //   .then(() => res);
 }

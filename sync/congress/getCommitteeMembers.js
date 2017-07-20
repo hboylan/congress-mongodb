@@ -1,4 +1,4 @@
-var Promise = require('bluebird')
+const Promise = require('bluebird')
 
 const titleMap = {
   'Chair': 'chair',
@@ -11,7 +11,8 @@ const titleMap = {
   'Vice Chairman': 'vice_chairman'
 }
 
-module.exports = (sync) => {
+module.exports = sync => {
+  console.log('Starting committee-members...');
 
   /**
    * Sync committee members
@@ -30,7 +31,7 @@ module.exports = (sync) => {
 
           // get committee
           return sync.db.Committee
-            .findOne({ thomas_id: thomas })
+            .findOne({thomas_id: thomas})
             .then(committee => {
 
               // get members
@@ -83,6 +84,9 @@ module.exports = (sync) => {
         })
         .then(() => bulkCommittee.execute())
         .then(() => bulkCommitteeMember.execute())
-        .then(sync.response)
+        .then(res => {
+          console.log('Finished committee-members...');
+          return sync.response(res);
+        });
   })
 }

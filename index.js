@@ -1,10 +1,25 @@
-#!/usr/bin/env node
+const glob = require('glob');
+const path = require('path');
+const URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/congress';
+const database = {};
 
-const congress = require('commander');
-const commands = require('./commands');
+// get mongoose models for congress
+database.models = mongoose => {
+  const db = {};
+  glob.sync(path.join(__dirname, 'sync/models/*.js'))
+    .forEach(modelPath => {
+      const model = require(modelPath)(mongoose);
+      if (model.name === 'Member'){
+        db[model.name] = mongoose.model(model.name, model.schema);
+      }
+    });
+  return db;
+};
 
-congress.version('1.0.0')
-  .arguments('[cmd]')
-  .option('-s, --session [session]', 'Specify congressional session', 115)
-  .action(commands)
-  .parse(process.argv)
+// mongoose connection
+database.connection = (mongoose, uri) => {
+  return mongoose.connect(uri || URI)
+    .then(() => database.models(mongoose));
+};
+
+module.exports = database;

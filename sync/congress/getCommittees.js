@@ -1,7 +1,8 @@
-var extend = require('util')._extend,
-  Promise = require('bluebird')
+const extend = require('util')._extend;
+const Promise = require('bluebird');
 
-module.exports = (sync) => {
+module.exports = sync => {
+  console.log('Starting committees...');
 
   // return subcommittee ids
   function _subcommittees(committee) {
@@ -47,6 +48,9 @@ module.exports = (sync) => {
             .update({$set: committee})
         })
         .then(() => bulk.execute())
-        .then(sync.response)
+        .then(res => {
+          console.log('Finished committees...');
+          return sync.response(res);
+        });
     })
 }

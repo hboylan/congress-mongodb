@@ -5,7 +5,8 @@ const chambers = {
   rep: 'house'
 }
 
-module.exports = (sync) => {
+module.exports = sync => {
+  console.log('Starting members...');
 
   return sync.json.readFileAsync(sync.paths.members)
     .then(list => {
@@ -26,5 +27,8 @@ module.exports = (sync) => {
 
       return bulk.execute()
     })
-    .then(sync.response)
+    .then(res => {
+      console.log('Finished members...');
+      return sync.response(res);
+    });
 }

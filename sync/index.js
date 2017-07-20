@@ -1,33 +1,31 @@
+const Promise = require('bluebird');
 const mongodb = require('mongodb');
 const congress = require('./congress');
-const uri = process.env.MONGODB_URI;
+let uri = process.env.MONGODB_URI;
 
-module.exports = () => {
+module.exports = (data, u) => {
+  uri = u || uri;
 
-  // MongoDB connect
-  mongodb.MongoClient.connect(uri, (err, db) => {
+  return new Promise((resolve, reject) => {
+    if (!uri) return reject('$MONGODB_URI not set!');
 
-    db.collections((err, collections) => {
-      console.log(`Syncing to ${uri}:\n${collections.map(c => c.s.name).join('\n')}\n`);
-    })
+    // MongoDB connect
+    mongodb.MongoClient.connect(uri, (err, db) => {
 
-    // MongoDB Driver collections
-    db.Bill = db.collection('bills');
-    db.BillSubject = db.collection('bill_subjects');
-    db.Committee = db.collection('committees');
-    db.CommitteeMember = db.collection('committee_members');
-    db.Member = db.collection('members');
+      db.collections((err, collections) => {
+        console.log(`Syncing to ${uri}:\n${collections.map(c => c.s.name).join('\n')}\n`);
+      })
 
-    // sync congress
-    return congress(db)
-      .then(res => {
-        console.log('Congress synced:', JSON.stringify(res, null, 2))
-        console.log('Sync complete!')
-        process.exit(0)
-      }, err => {
-        console.log('Congress error:', err)
-        console.log('Sync failed!')
-        process.exit(0)
-      });
+      // MongoDB Driver collections
+      db.Bill = db.collection('bills');
+      db.BillSubject = db.collection('bill_subjects');
+      db.Committee = db.collection('committees');
+      db.CommitteeMember = db.collection('committee_members');
+      db.Member = db.collection('members');
+
+      // sync congress
+      return congress(data, db)
+        .then(resolve, reject); // comment this to output error stack
+    });
   });
 };

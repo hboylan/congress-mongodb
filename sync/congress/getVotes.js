@@ -1,30 +1,28 @@
-var fs = require('fs'),
-  path = require('path'),
-  Promise = require('bluebird')
+const fs = require('fs');
+const path = require('path');
+const Promise = require('bluebird');
 
-module.exports = (sync) => {
+module.exports = sync => {
+  console.log('Starting votes...');
 
-  let _getMember = (json) => {
+  const _getMember = json => {
     const error = () => {
       return new Error("Failed to get member: (" + json.id + ") " + json.display_name)
     }
     return sync.db.Member.findOne({ $or: [{'id.bioguide': json.id }, {'id.lis': json.id}] })
-      .then(member => {
-        if (!member) return error();
-        return member._id
-      }, error)
+      .then(member => !member ? error() : member._id, error);
   }
 
   // /data/congress/{congress}/{year}/{votes}/
-  let _getVote = (votePath) => {
+  const _getVote = votePath => {
     var file = path.join(votePath, 'data.json')
     var json = JSON.parse(fs.readFileSync(file, 'utf8'))
 
     // iterate votes
-    return Promise.map(Object.keys(json.votes), (key) => {
+    return Promise.map(Object.keys(json.votes), key => {
 
       // iterate members
-      return Promise.map(json.votes[key], _getMember).then((members) => {
+      return Promise.map(json.votes[key], _getMember).then(members => {
 
         // reduce members
         return Promise.reduce(members, (list, next) => {
@@ -48,7 +46,7 @@ module.exports = (sync) => {
   }
 
   // /data/congress/{congress}/{year}/
-  let _getVotes = (year) => {
+  let _getVotes = year => {
     var dirs = sync.dirs(year), chunked = [], chunk = 100;
     for (var i = 0; i < dirs.length; i += chunk) {
       chunked.push(dirs.slice(i, i + chunk))
@@ -56,14 +54,14 @@ module.exports = (sync) => {
 
     // parse votes
     return Promise
-      .map(chunked, dirs => Promise.map(dirs, _getVote, { concurrency: 4 }))
+      .map(chunked, dirs => Promise.map(dirs, _getVote, {concurrency: 4}))
       .then(chunkedVotes => {
 
         // chunked bulk save
         return Promise.map(chunkedVotes, votes => {
           var bulk = sync.db.Vote.initializeUnorderedBulkOp()
           votes.forEach(vote => {
-            bulk.find({ 'vote_id': vote.vote_id }).upsert().update({ $set: vote })
+            bulk.find({vote_id: vote.vote_id}).upsert().update({$set: vote})
           })
 
           return bulk.execute(res => {
@@ -73,6 +71,10 @@ module.exports = (sync) => {
           })
         })
       }, {concurrency: 1})
+      .then(res => {
+        console.log('Finished votes...');
+        return res;
+      });
   }
 
   return sync.session('votes', _getVotes)

@@ -1,6 +1,7 @@
-var Promise = require('bluebird')
+const Promise = require('bluebird')
 
-module.exports = (sync) => {
+module.exports = sync => {
+  console.log('Starting members-historical...');
 
   // get JSON
   return sync.json.readFileAsync(sync.paths.membersHistorical).then(list => {
@@ -13,4 +14,8 @@ module.exports = (sync) => {
     }
     return bulk.execute()
   })
+  .then(res => {
+    console.log('Finished members-historical...');
+    return sync.response(res);
+  });
 }

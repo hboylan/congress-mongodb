@@ -1,8 +1,9 @@
-let fs = require('fs'),
-  path = require('path'),
-  Promise = require('bluebird')
+const fs = require('fs');
+const path = require('path');
+const Promise = require('bluebird');
 
 module.exports = sync => {
+  console.log('Starting bills...');
 
   // bill_subjects
   function _getBillSubjects(bills) {
@@ -108,6 +109,7 @@ module.exports = sync => {
       .then(res => {
         let json = {}
         json[path.parse(type).base] = sync.response(res)
+        console.log('Finished bills...');
         return json
       })
   }

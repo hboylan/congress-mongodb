@@ -1,18 +1,26 @@
 {
   "name": "congress-mongodb",
+  "description": "Integrate congress data using MongoDB",
   "version": "1.0.0",
-  "description": "Import congress data to MongoDB",
-  "main": "index.js",
-  "scripts": {
-    "init": "cd congress-legislators && git submodule init && git submodule update && git checkout origin/gh-pages && cd .. && yarn"
-  },
+  "author": "Hugh Boylan <bluehugh2@gmail.com>",
   "bin": {
-    "congress": "./index.js"
+    "congress": "./sync/commands/index.js",
+    "congress-fetch": "./sync/commands/fetch.js",
+    "congress-sync": "./sync/commands/sync.js",
+    "congress-remove": "./sync/commands/remove.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hboylan/congress-mongodb.git"
+  "bugs": {
+    "url": "https://github.com/hboylan/congress-mongodb/issues"
   },
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "chalk": "^2.0.1",
+    "commander": "^2.11.0",
+    "glob": "^7.1.2",
+    "jsonfile": "^3.0.1",
+    "mongodb": "^2.2.30"
+  },
+  "homepage": "https://github.com/hboylan/congress-mongodb#readme",
   "keywords": [
     "cli",
     "congress",
@@ -20,16 +28,17 @@
     "mongodb",
     "unitedstates"
   ],
-  "author": "Hugh Boylan <bluehugh2@gmail.com>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/hboylan/congress-mongodb/issues"
+  "main": "index.js",
+  "peerDependencies": {
+    "mongoose": "4.x"
   },
-  "homepage": "https://github.com/hboylan/congress-mongodb#readme",
-  "dependencies": {
-    "commander": "^2.11.0",
-    "jsonfile": "^3.0.1",
-    "mongodb": "^2.2.30",
-    "mongoose": "^4.11.3"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hboylan/congress-mongodb.git"
+  },
+  "scripts": {
+    "init": "cd congress-legislators && git submodule init && git submodule update && mkdir -p congress/data && cd ../congress && git submodule init && git submodule update && cd ..",
+    "preinstall": "npm run init"
   }
 }
