@@ -3,6 +3,10 @@ const chalk = require('chalk');
 const path = require('path');
 const util = {};
 
+/* Export */
+
+util.chalk = chalk;
+
 
 /* I/O */
 

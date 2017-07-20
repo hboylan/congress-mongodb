@@ -17,7 +17,7 @@ database.models = mongoose => {
 };
 
 // mongoose connection
-database.connection = (mongoose, uri) => {
+database.connect = (mongoose, uri) => {
   return mongoose.connect(uri || URI)
     .then(() => database.models(mongoose));
 };

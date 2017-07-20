@@ -12,7 +12,7 @@ const titleMap = {
 }
 
 module.exports = sync => {
-  util.info('Starting committee-members...');
+  util.info('Starting committee members...');
 
   /**
    * Sync committee members
@@ -59,6 +59,7 @@ module.exports = sync => {
           // iterate committee member data
           committeeMap[res.thomas].forEach(committeeMember => {
             const member = memberMap[committeeMember.thomas]
+            util.log(`${util.chalk.white('CommitteeMember:')} ${res.thomas} - ${member.name}`);
 
             // parse member
             if (committeeMember.title) {
@@ -85,7 +86,7 @@ module.exports = sync => {
         .then(() => bulkCommittee.execute())
         .then(() => bulkCommitteeMember.execute())
         .then(res => {
-          util.info('Finished committee-members...\n');
+          util.info('Finished committee members...\n');
           return sync.response(res);
         });
   })

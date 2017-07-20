@@ -7,13 +7,13 @@ module.exports = sync => {
 
   // return subcommittee ids
   function _subcommittees(committee) {
-    util.log(`Found ${committee.type } committee: ${committee.name}`)
+    util.log(`${util.chalk.white('Committee ('+committee.type+'):')} ${committee.name}`)
     if (!Array.isArray(committee.subcommittees)) return;
 
     let bulk = sync.db.Committee.initializeUnorderedBulkOp()
     for (let i in committee.subcommittees) {
       let sub = ({}, committee.subcommittees[i])
-      util.log(`Found sub committee: ${sub.name}`)
+      util.log(`${util.chalk.white('Committee (sub):')} ${sub.name}`)
       sub.leadership = {}
       sub.thomas_id = committee.thomas_id + sub.thomas_id
       sub.type = 'sub'

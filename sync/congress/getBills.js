@@ -18,7 +18,7 @@ module.exports = sync => {
         // count num_bills
         return Promise
           .map(subjects, value => {
-            util.log(`Found bill subject: ${value}`)
+            util.log(`${util.chalk.white('BillSubject:')} ${value}`)
             return sync.db.Bill.count({subjects: value})
               .then(num_bills => {
 
@@ -100,7 +100,7 @@ module.exports = sync => {
 
         let bulk = sync.db.Bill.initializeUnorderedBulkOp()
         bills.forEach(bill => {
-          util.log(`Found bill: ${bill.official_title}`)
+          util.log(`${util.chalk.white('Bill:')} ${bill.official_title}`)
           bulk.find({'bill_id': bill.bill_id})
             .upsert()
             .update({$set: bill})

@@ -12,7 +12,7 @@ module.exports = sync => {
       let bulk = sync.db.Member.initializeUnorderedBulkOp()
 
       list.forEach(json => {
-        util.log(`Found member: ${json.name.official_full}`);
+        util.log(`${util.chalk.white('Member (current):')} ${json.name.official_full}`);
 
         let term = json.terms[json.terms.length - 1]
         json.current = true

@@ -13,7 +13,7 @@
 
 - [Dependencies](#dependencies)
 - [Install](#install)
-- [Integrate](#integrate)
+- [Use](#use)
 - [Develop](#develop)
 - [Todo](#todo)
 - [License](#license)
@@ -48,7 +48,7 @@ yarn add congress-mongodb
 ```
 
 
-## Integrate
+## Use
 
 #### Command - fetch
 Download sitemaps, json, etc.
@@ -72,9 +72,14 @@ import congress from 'congress-mongodb';
 import mongoose from 'mongoose';
 
 // pass uri or set $MONGODB_URI
-congress.connection(mongoose, uri)
+congress.connect(mongoose, uri)
   .then(db => {
-    db.Member.find().then(console.log)
+
+    // current members
+    db.Member.find({current: true})
+      .then(m => {
+        console.log(m.join('\n'));
+      });
   });
 ```
 
