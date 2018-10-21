@@ -7,7 +7,7 @@ const util = require('../util');
 
 congress
   .option('-d, --data <directory>', 'Directory for congress data', 'congress')
-  .option('-u, --uri <uri>', 'MongoDB URI', 'mongodb://localhost:27017/congress')
+  .option('-u, --uri <uri>', 'MongoDB URI', process.env.MONGODB_URI || 'mongodb://localhost:27017/congress')
   .parse(process.argv);
 
 // validate

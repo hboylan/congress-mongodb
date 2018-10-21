@@ -17,7 +17,8 @@
     "commander": "^2.11.0",
     "glob": "^7.1.2",
     "jsonfile": "^3.0.1",
-    "mongodb": "^2.2.30"
+    "mongodb": "^2.2.30",
+    "mongoose": "^4.0.0"
   },
   "homepage": "https://github.com/hboylan/congress-mongodb#readme",
   "keywords": [
@@ -29,9 +30,6 @@
   ],
   "license": "MIT",
   "main": "index.js",
-  "peerDependencies": {
-    "mongoose": "^4.0.0"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hboylan/congress-mongodb.git"

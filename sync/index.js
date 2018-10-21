@@ -2,16 +2,16 @@ const Promise = require('bluebird');
 const mongodb = require('mongodb');
 const congress = require('./congress');
 const util = require('./util');
-let uri = process.env.MONGODB_URI;
 
 module.exports = (data, u) => {
-  uri = u || uri;
+  let uri = u;
 
   return new Promise((resolve, reject) => {
     if (!uri) return reject('$MONGODB_URI not set!');
 
     // MongoDB connect
     mongodb.MongoClient.connect(uri, (err, db) => {
+      console.log(err)
 
       db.collections((err, collections) => {
         util.info(`Database:\n${uri}\n`);
